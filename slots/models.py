@@ -3,9 +3,10 @@ from django.db import models
 from django.conf import settings
 
 class Slot(models.Model):
+    # Fixed lowercase 'l'
     slot_number = models.CharField(max_length=50, unique=True)
     
-    # Fixed here: Keep on_delete=models.SET_NULL and remove the extra on_index line
+    # Removed the on_index line completely
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, 
         on_delete=models.SET_NULL, 
