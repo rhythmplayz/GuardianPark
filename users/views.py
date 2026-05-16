@@ -8,6 +8,8 @@ from django.contrib.auth import get_user_model
 from slots.models import Slot
 from rest_framework.permissions import IsAuthenticated
 
+
+
 User = get_user_model()
 
 class RegisterView(APIView):
@@ -42,14 +44,6 @@ class LoginView(APIView):
             
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-# users/views.py
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from django.contrib.auth import get_user_model
-from slots.models import Slot  # Import the Slot model from the slots app
-
-User = get_user_model()
 
 class RFIDCheckView(APIView):
     def post(self, request):
