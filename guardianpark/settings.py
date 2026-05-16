@@ -41,6 +41,11 @@ else:
 
 AUTH_USER_MODEL = 'users.CustomUser'
 
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",  # Keep this for your local Windows testing
+    "https://guardianpark-frontend.onrender.com",  # <-- Replace with your real live Render frontend URL!
+]
+
 # Application definition
 
 INSTALLED_APPS = [
