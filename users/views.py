@@ -99,7 +99,7 @@ class SlotLeaveStatusView(APIView):
             
             slot.user = None
             slot.will_leave_status = False
-
+            slot.save()
             return Response({
                 "slot_number": slot_number,
                 "will_leave_status": status_text
