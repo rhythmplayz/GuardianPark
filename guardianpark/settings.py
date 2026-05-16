@@ -59,11 +59,18 @@ INSTALLED_APPS = [
     # Third-party apps
     'corsheaders',
     'rest_framework',
+    'rest_framework.authtoken',
     
     # Local apps
     'users',
     'slots',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication', # <-- Tells views to accept the 'Token <key>' header
+    ],
+}
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',  # <-- CRITICAL: This MUST be the very first line!

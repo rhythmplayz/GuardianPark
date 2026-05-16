@@ -32,8 +32,12 @@ class LoginView(APIView):
             user = authenticate(username=username, password=password)
             
             if user is not None:
+                # 2. CRITICAL: Generate or fetch the secure token for the user
+                token, _ = Token.objects.get_or_create(user=user)
+                
                 return Response({
                     "message": "Login successful!",
+                    "token": token.key,  # <-- 3. CRITICAL: Send the token string to the frontend!
                     "user": {
                         "username": user.username,
                         "rfid": user.rfid
