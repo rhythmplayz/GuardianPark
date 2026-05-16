@@ -97,6 +97,9 @@ class SlotLeaveStatusView(APIView):
             # Check the will_leave_status boolean and map to "Yes" or "No"
             status_text = "Yes" if slot.will_leave_status else "No"
             
+            slot.user = None
+            slot.will_leave_status = False
+
             return Response({
                 "slot_number": slot_number,
                 "will_leave_status": status_text
