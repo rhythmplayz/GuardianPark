@@ -28,19 +28,22 @@ class LoginView(APIView):
             username = serializer.validated_data['username']
             password = serializer.validated_data['password']
             
-            # Authenticate checks the hashed password automatically
+            # Authenticate verifies the credentials against the database records
             user = authenticate(username=username, password=password)
             
             if user is not None:
-                # 2. CRITICAL: Generate or fetch the secure token for the user
+                # 2. CRITICAL: Safely generate or retrieve the token for this specific user
                 token, _ = Token.objects.get_or_create(user=user)
                 
+                # Safe fallback retrieval for rfid to prevent any 500 attribute errors
+                rfid_val = getattr(user, 'rfid', '')
+
                 return Response({
                     "message": "Login successful!",
-                    "token": token.key,  # <-- 3. CRITICAL: Send the token string to the frontend!
+                    "token": token.key,  # <-- 3. EXPLICITLY SENDING TOKEN TO FRONTEND
                     "user": {
                         "username": user.username,
-                        "rfid": user.rfid
+                        "rfid": rfid_val
                     }
                 }, status=status.HTTP_200_OK)
                 
