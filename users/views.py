@@ -7,6 +7,7 @@ from .serializers import RegisterSerializer, LoginSerializer
 from django.contrib.auth import get_user_model
 from slots.models import Slot
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.authtoken.models import Token
 
 
 
@@ -28,27 +29,23 @@ class LoginView(APIView):
             username = serializer.validated_data['username']
             password = serializer.validated_data['password']
             
-            # Authenticate verifies the credentials against the database records
             user = authenticate(username=username, password=password)
             
             if user is not None:
-                # 2. CRITICAL: Safely generate or retrieve the token for this specific user
+                # 1. Generate or fetch the matching database key token
                 token, _ = Token.objects.get_or_create(user=user)
                 
-                # Safe fallback retrieval for rfid to prevent any 500 attribute errors
-                rfid_val = getattr(user, 'rfid', '')
-
+                # 2. Return the EXACT key 'token' that your frontend line 39 checks for
                 return Response({
                     "message": "Login successful!",
-                    "token": token.key,  # <-- 3. EXPLICITLY SENDING TOKEN TO FRONTEND
+                    "token": token.key, 
                     "user": {
                         "username": user.username,
-                        "rfid": rfid_val
+                        "rfid": getattr(user, 'rfid', '')
                     }
                 }, status=status.HTTP_200_OK)
                 
             return Response({"error": "Invalid username or password"}, status=status.HTTP_401_UNAUTHORIZED)
-            
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 
