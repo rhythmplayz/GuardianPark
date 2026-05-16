@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import ClearAlertView, RFIDCheckView, RegisterView, LoginView, SlotLeaveStatusView, UserActiveSlotView, UserDashboardSlotStatusView
+from .views import ClearAlertView, RFIDCheckView, RegisterView, LoginView, SlotLeaveStatusView, TriggerAlertView, UserActiveSlotView, UserDashboardSlotStatusView
 
 urlpatterns = [
     path('register/', RegisterView.as_view(), name='register'),
@@ -9,4 +9,5 @@ urlpatterns = [
     path('dashboard/update-status/', UserDashboardSlotStatusView.as_view(), name='dashboard-update-status'),
     path('dashboard/active-slot/', UserActiveSlotView.as_view(), name='active-slot'),
     path('dashboard/clear-alert/', ClearAlertView.as_view(), name='clear-alert'),
+    path('dashboard/trigger-alert/', TriggerAlertView.as_view(), name='trigger-alert'),
 ]

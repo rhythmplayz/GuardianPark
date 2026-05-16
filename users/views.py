@@ -169,3 +169,25 @@ class ClearAlertView(APIView):
             return Response({"message": "Alert cleared."}, status=status.HTTP_200_OK)
         except Slot.DoesNotExist:
             return Response({"error": "No active slot found."}, status=status.HTTP_404_NOT_FOUND)
+        
+
+class TriggerAlertView(APIView):
+    # Public endpoint or specialized hardware access (No auth token required for the ESP32)
+    def post(self, request):
+        slot_number = request.data.get('slot_number')
+        security_alert = request.data.get('security_alert', False)
+
+        if not slot_number:
+            return Response({"error": "Slot number is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            slot = Slot.objects.get(slot_number=slot_number)
+            slot.security_alert = security_alert
+            slot.save()
+            return Response({
+                "message": f"Security alert status for Slot {slot_number} updated to {security_alert}.",
+                "slot_number": slot_number,
+                "security_alert": slot.security_alert
+            }, status=status.HTTP_200_OK)
+        except Slot.DoesNotExist:
+            return Response({"error": f"Slot {slot_number} does not exist."}, status=status.HTTP_404_NOT_FOUND)
